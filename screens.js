@@ -10,13 +10,16 @@ export const screens = [
             headerStyle: {
                 // backgroundColor: '#eb5d3d'
             },
+            // headerTitleStyle: {
+            //     fontWeight: 600,
+            // }
         }
     },
     {
         name: 'Fullinfo',
         component: FullInfo,
         options: {
-            title: 'My Contacts'
+            title: 'Details',
         }
     }
 ];

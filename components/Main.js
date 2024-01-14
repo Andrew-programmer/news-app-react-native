@@ -1,7 +1,8 @@
-import {Button, Text, View, TouchableOpacity, FlatList, Image, StyleSheet} from "react-native";
+import {Button, Text, View, TouchableOpacity, FlatList, Image, StyleSheet, Modal} from "react-native";
 import {globalStyles} from "../styles/style";
 import {useState} from "react";
-import {withDevTools} from "expo/build/launch/withDevTools";
+import { Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 const newsInit = [
     {
@@ -32,6 +33,7 @@ const newsInit = [
 
 export const Main = ({navigation}) => {
     const [news, setNews] = useState(newsInit);
+    const [open, setOpen] = useState(false);
 
     const isLastItem = (item) => {
         return news.findLastIndex((value) => value === item) === news.length - 1
@@ -43,10 +45,15 @@ export const Main = ({navigation}) => {
         }
     }
 
+    const toggleModal = () => {
+        setOpen(prevState => !prevState);
+    }
+
+
     return (
         <View style={globalStyles.main}>
             <Text style={[globalStyles.title, styles.header]}>
-                Main Page
+                News
             </Text>
             <FlatList scrollEnabled={true} showsVerticalScrollIndicator={false} data={news} renderItem={({item}) => (
                 <TouchableOpacity style={[styles.item, setUnderline(item)]} onPress={() => navigation.navigate('Fullinfo', item)}>
@@ -59,6 +66,20 @@ export const Main = ({navigation}) => {
                     <Text style={styles.anons}>{item.anons}</Text>
                 </TouchableOpacity>
             )}/>
+            <View style={styles.iconAdd}>
+                <Feather name="plus-circle" size={50} color="black" onPress={toggleModal}/>
+            </View>
+            <Modal
+                visible={open}
+                // style={styles.modal}
+            >
+                <View style={[globalStyles.main, styles.modalContainer]}>
+                    <AntDesign name="closecircleo" size={24} color="red" style={styles.modalCloseIcon} onPress={toggleModal} />
+                    <Text style={styles.title}>
+                        Add article
+                    </Text>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -89,4 +110,29 @@ const styles = StyleSheet.create({
     underline: {
         borderBottomWidth: 0.5
     },
+    iconAdd: {
+        position: 'absolute',
+        bottom: 40,
+        right: 40,
+        backgroundColor: 'white',
+        borderRadius: 50,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+        elevation: 6,
+    },
+    modalCloseIcon: {
+        textAlign: 'right',
+        width: '90%'
+    },
+    // modal: {
+    //     opacity: 0.3
+    // },
+    modalContainer: {
+        paddingTop: 10
+    }
 });
